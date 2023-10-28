@@ -23,13 +23,22 @@ router.post("/", async (req, res) => {
     }
 })
 router.get("/", async (req, res) => {
-    const allTweets = await prisma.tweet.findMany()
+    const allTweets = await prisma.tweet.findMany({
+        include: {user: {
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+            }
+        }}
+    });
     res.json(allTweets)
 })
 
 router.get("/:id", async (req, res) => {
     const {id} = req.params;
-    const tweet = await prisma.tweet.findUnique({ where: {id: Number(id)}});
+    const tweet = await prisma.tweet.findUnique({ where: {id: Number(id)}, include: {user: true}});
     if (!tweet) {
         return res.status(404).json({ error: "Tweet not found!"})
     }
