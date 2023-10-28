@@ -33,7 +33,10 @@ router.get("/", async (req, res) => {
 //get one user
 router.get("/:id", async (req, res) => {
     const {id} = req.params;
-    const user = await prisma.user.findUnique({ where: {id: Number(id)}})
+    const user = await prisma.user.findUnique({ where: {id: Number(id)}});
+    if (!user) {
+        return res.status(404).json({ error: "User  not found!"})
+    }
     res.json(user)
 })
 
@@ -50,7 +53,7 @@ router.put("/:id", async (req, res) => {
         });
         res.json(result)
     } catch (error) {
-        res.status(501).json({error: "Not implemented"})
+        res.status(501).json({error: "User not updated"})
     }
 })
 
