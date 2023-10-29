@@ -1,20 +1,27 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
+import jwt from  'jsonwebtoken';
+
+const JWT_SECRET = 'SUPER SECRET';
+
 
 const router = Router();
 const prisma = new PrismaClient();
 
 
-router.post("/", async (req, res) => {
-    try {
-        const { content, image, userId } = req.body;
 
+router.post("/", async (req, res) => {
+    const { content, image } = req.body;
+
+    // @ts-ignore
+    const user = req.user;
+
+    try {
         const result = await prisma.tweet.create({
             data: {
                 content,
                 image,
-                userId //TODO manage based on auth user
-                
+                userId: user.id 
             }
         });
         res.json(result);

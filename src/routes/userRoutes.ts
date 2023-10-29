@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
         });
         res.json(result);
     } catch (error) {
-        res.status(400).json({ error: "Email and Username must be unique"});     
+        res.status(400).json({ error: "Email and Username must be unique" });
     }
 
 });
@@ -34,10 +34,10 @@ router.get("/", async (req, res) => {
 
 //get one user
 router.get("/:id", async (req, res) => {
-    const {id} = req.params;
-    const user = await prisma.user.findUnique({ where: {id: Number(id)}, include: {tweets: true}});
+    const { id } = req.params;
+    const user = await prisma.user.findUnique({ where: { id: Number(id) }, include: { tweets: true } });
     if (!user) {
-        return res.status(404).json({ error: "User  not found!"})
+        return res.status(404).json({ error: "User  not found!" })
     }
     res.json(user)
 })
@@ -45,25 +45,25 @@ router.get("/:id", async (req, res) => {
 
 //update user
 router.put("/:id", async (req, res) => {
-    const {id} = req.params;
-    const {bio, name, image, username} = req.body;
+    const { id } = req.params;
+    const { bio, name, image, username } = req.body;
 
     try {
         const result = await prisma.user.update({
-            where: {id: Number(id)},
-            data: {bio, name, image, username }
+            where: { id: Number(id) },
+            data: { bio, name, image, username }
         });
         res.json(result)
     } catch (error) {
-        res.status(501).json({error: "User not updated"})
+        res.status(501).json({ error: "User not updated!" })
     }
 })
 
 //delete user
 router.delete("/:id", async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     await prisma.user.delete({
-        where: { id: Number(id)}
+        where: { id: Number(id) }
     })
     res.sendStatus(200)
 })
